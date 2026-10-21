@@ -102,3 +102,20 @@ El invernadero como tal no lo modelo como clase: `Main` coordina los objetos en 
 - **¿Qué indica `@Override`?** Que el método reemplaza uno de la superclase; el compilador marca error si la firma no coincide.
 - **¿Por qué el mismo nombre?** Porque la acción es la misma (interpretar la medición) aunque el criterio cambie por tipo.
 - **Ventaja:** desde cualquier `Sensor` basta llamar `evaluarMedicion()`, sin conocer su tipo ni tener métodos distintos (`evaluarTemp`, `evaluarSuelo`...). Agregar un sensor nuevo no obliga a cambiar el código que ya los procesa.
+
+## 11. Polimorfismo y enlace dinámico
+
+En `Main` uso `Sensor[] sensores = {s1, s2, s3}` con `Sensor s1 = new SensorTemperatura(...)`, `Sensor s2 = new SensorHumedad(...)` y `Sensor s3 = new SensorHumedadSuelo(...)`, y las recorro con `for (Sensor sensor : sensores) sensor.evaluarMedicion()`, sin `if/else` por tipo.
+
+| Tipo de referencia | Tipo real del objeto | Método que se ejecuta |
+|---|---|---|
+| Sensor | SensorTemperatura | `SensorTemperatura.evaluarMedicion()` (rangos 18 y 30 °C) |
+| Sensor | SensorHumedad | `SensorHumedad.evaluarMedicion()` (rangos 40 y 70 %) |
+| Sensor | SensorHumedadSuelo | `SensorHumedadSuelo.evaluarMedicion()` (rangos 30 y 70 %) |
+
+- **¿Por qué `Sensor` puede apuntar a un `SensorTemperatura`?** Porque un `SensorTemperatura` *es un* `Sensor`; tiene todo lo que la superclase declara.
+- **¿Puede una referencia `SensorTemperatura` apuntar a cualquier `Sensor`?** No. Un `Sensor` cualquiera podría ser de humedad y no tendría los métodos de temperatura; el compilador no lo permite sin casting.
+- **¿Qué versión se ejecuta en `sensor.evaluarMedicion()`?** La de la clase real del objeto, no la del tipo de la referencia.
+- **¿Cómo lo decide Java?** En tiempo de ejecución, según el objeto al que apunta la referencia (enlace dinámico).
+- **Polimorfismo:** en el ciclo `for (Sensor sensor : sensores)` de `Main`, donde la misma llamada produce resultados distintos (con 32: "Temperatura alta", "Humedad ambiental baja" o "Humedad del suelo adecuada").
+- **Enlace dinámico:** en esa misma llamada `sensor.evaluarMedicion()`; la implementación se elige al ejecutar.

@@ -13,7 +13,8 @@ public class Main {
         s3.registrarMedicion(22);
 
         for (Sensor sensor : sensores) {
-            System.out.println(sensor.mostrarInformacion());
+            System.out.println(sensor.mostrarInformacion()
+                    + "  ->  " + sensor.evaluarMedicion());
         }
     }
 }
