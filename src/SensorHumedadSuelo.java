@@ -19,4 +19,9 @@ public class SensorHumedadSuelo extends Sensor {
         }
         return "Humedad del suelo alta";
     }
+
+    // Comportamiento exclusivo de este sensor.
+    public boolean requiereRiego() {
+        return getUltimaMedicion() < 30;
+    }
 }

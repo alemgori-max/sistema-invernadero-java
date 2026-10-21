@@ -119,3 +119,12 @@ En `Main` uso `Sensor[] sensores = {s1, s2, s3}` con `Sensor s1 = new SensorTemp
 - **¿Cómo lo decide Java?** En tiempo de ejecución, según el objeto al que apunta la referencia (enlace dinámico).
 - **Polimorfismo:** en el ciclo `for (Sensor sensor : sensores)` de `Main`, donde la misma llamada produce resultados distintos (con 32: "Temperatura alta", "Humedad ambiental baja" o "Humedad del suelo adecuada").
 - **Enlace dinámico:** en esa misma llamada `sensor.evaluarMedicion()`; la implementación se elige al ejecutar.
+
+## 12. instanceof y casting
+
+Agregué `convertirAFahrenheit()` solo en `SensorTemperatura` y `requiereRiego()` solo en `SensorHumedadSuelo`; no están en `Sensor`. En `Main`, con una referencia `Sensor`, uso `if (sensor instanceof SensorTemperatura)` y luego `(SensorTemperatura) sensor` para llamar al método específico (igual con el suelo).
+
+- **¿Por qué fue necesario el casting?** Porque el tipo de la referencia es `Sensor` y el compilador solo deja ver lo que `Sensor` declara.
+- **¿Qué comprueba `instanceof`?** Si el objeto real es de ese tipo (o subtipo), para que el casting sea seguro.
+- **¿Qué pasa con una subclase incorrecta?** Se lanza `ClassCastException` en ejecución.
+- **¿Por qué no sustituir el polimorfismo con `instanceof`?** Porque obliga a una cadena de `if/else` por tipo que hay que modificar con cada sensor nuevo. Lo uso solo para lo que no existe en la superclase.

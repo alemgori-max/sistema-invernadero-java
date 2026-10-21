@@ -19,4 +19,9 @@ public class SensorTemperatura extends Sensor {
         }
         return "Temperatura alta";
     }
+
+    // Comportamiento exclusivo de este sensor.
+    public double convertirAFahrenheit() {
+        return getUltimaMedicion() * 9 / 5 + 32;
+    }
 }
