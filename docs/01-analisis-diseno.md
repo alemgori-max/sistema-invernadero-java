@@ -128,3 +128,11 @@ Agregué `convertirAFahrenheit()` solo en `SensorTemperatura` y `requiereRiego()
 - **¿Qué comprueba `instanceof`?** Si el objeto real es de ese tipo (o subtipo), para que el casting sea seguro.
 - **¿Qué pasa con una subclase incorrecta?** Se lanza `ClassCastException` en ejecución.
 - **¿Por qué no sustituir el polimorfismo con `instanceof`?** Porque obliga a una cadena de `if/else` por tipo que hay que modificar con cada sensor nuevo. Lo uso solo para lo que no existe en la superclase.
+
+## 13. Sistema de riego
+
+**¿El riego "es un" sensor o utiliza información de los sensores?** Utiliza información de los sensores.
+
+- **En el código:** `SistemaRiego` no extiende nada; su método `regularSegun(SensorHumedadSuelo suelo)` recibe el sensor y llama a `suelo.requiereRiego()`; si es `true` activa el riego y si no, lo desactiva. `Main` los conecta con `instanceof`/casting sobre la colección.
+- **En el UML:** flecha de dependencia (punteada) de `SistemaRiego` hacia `SensorHumedadSuelo`, sin flecha de herencia.
+- **Resultado:** con suelo 22 % el riego queda ACTIVO; con 51 % queda INACTIVO.
