@@ -136,3 +136,34 @@ Agregué `convertirAFahrenheit()` solo en `SensorTemperatura` y `requiereRiego()
 - **En el código:** `SistemaRiego` no extiende nada; su método `regularSegun(SensorHumedadSuelo suelo)` recibe el sensor y llama a `suelo.requiereRiego()`; si es `true` activa el riego y si no, lo desactiva. `Main` los conecta con `instanceof`/casting sobre la colección.
 - **En el UML:** flecha de dependencia (punteada) de `SistemaRiego` hacia `SensorHumedadSuelo`, sin flecha de herencia.
 - **Resultado:** con suelo 22 % el riego queda ACTIVO; con 51 % queda INACTIVO.
+
+## 14. Pruebas realizadas
+
+Ejecutadas con la clase `PruebasInvernadero` (sin JUnit): 22 verificaciones, 22 correctas.
+
+| Caso | Resultado esperado | Resultado |
+|---|---|---|
+| Crear los diferentes sensores | Conservan id, ubicación y estado | ✔ |
+| Temperatura 15 / 25 / 34 | Baja / adecuada / alta | ✔ |
+| Humedad ambiental 32 / 55 / 82 | Baja / adecuada / alta | ✔ |
+| Humedad del suelo 18 / 48 / 83 | Baja / adecuada / alta | ✔ |
+| Procesar sensores con referencias `Sensor` (valor 32) | Alta / baja / adecuada según su tipo | ✔ |
+| Recorrer la colección | Todos procesables con el tipo común | ✔ |
+| `instanceof` | Identifica el tipo (verdadero y falso) | ✔ |
+| Casting tras `instanceof` | 32 °C → 89.6 °F | ✔ |
+| Suelo 22 % | Riego activo | ✔ |
+| Suelo 55 % / 85 % | Riego inactivo | ✔ |
+| Sensor inactivo | No registra la medición | ✔ |
+
+## Cambios realizados al diseño
+
+| Cambio | Motivo |
+|---|---|
+| Se agregó `getUnidad()` en `Sensor` y se sobrescribió en las subclases | `mostrarInformacion()` necesitaba mostrar °C o % sin escribir la unidad en la superclase |
+| Se agregó `SistemaRiego.regularSegun(SensorHumedadSuelo)` | Para que el riego use la medición del suelo en vez de que `Main` decida por él |
+| La dependencia del riego pasó de `Sensor` a `SensorHumedadSuelo` | Solo ese sensor tiene `requiereRiego()` |
+| Se agregó la clase `PruebasInvernadero` | Ejecutar los casos de prueba obligatorios |
+
+## Diagrama UML final
+
+![Diagrama UML final](uml-final.png)
