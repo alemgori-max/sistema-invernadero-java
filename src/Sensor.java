@@ -45,6 +45,10 @@ public class Sensor {
         return true;
     }
 
+    public String getUnidad() {
+        return "";
+    }
+
     // Comportamiento general: será sobrescrito en cada subclase.
     public String evaluarMedicion() {
         return "Medición sin interpretar";
@@ -52,6 +56,6 @@ public class Sensor {
 
     public String mostrarInformacion() {
         return id + " | " + ubicacion + " | " + (activo ? "activo" : "inactivo")
-                + " | " + ultimaMedicion;
+                + " | " + ultimaMedicion + " " + getUnidad();
     }
 }

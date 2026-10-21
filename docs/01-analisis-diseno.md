@@ -95,3 +95,10 @@ El invernadero como tal no lo modelo como clase: `Main` coordina los objetos en 
 - **¿Los constructores de la superclase se heredan?** No. Cada subclase declara el suyo.
 - **¿Qué constructor se ejecuta primero?** El de la superclase `Sensor`, y después el de la subclase.
 - **¿Para qué usé `super(id, ubicacion)`?** Para inicializar la parte `Sensor` del objeto (id, ubicación, estado, medición) sin repetir esa asignación en cada subclase; además los atributos son `private` y las subclases no pueden asignarlos directamente.
+
+## 10. Sobrescritura
+
+- **¿Qué método sobrescribí?** `evaluarMedicion()` (y también `getUnidad()`, para mostrar la unidad correcta).
+- **¿Qué indica `@Override`?** Que el método reemplaza uno de la superclase; el compilador marca error si la firma no coincide.
+- **¿Por qué el mismo nombre?** Porque la acción es la misma (interpretar la medición) aunque el criterio cambie por tipo.
+- **Ventaja:** desde cualquier `Sensor` basta llamar `evaluarMedicion()`, sin conocer su tipo ni tener métodos distintos (`evaluarTemp`, `evaluarSuelo`...). Agregar un sensor nuevo no obliga a cambiar el código que ya los procesa.
