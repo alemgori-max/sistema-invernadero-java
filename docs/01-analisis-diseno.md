@@ -53,3 +53,39 @@ El invernadero como tal no lo modelo como clase: `Main` coordina los objetos en 
 - **No se duplica:** id, ubicación, estado y medición viven solo en la superclase; la decisión de regar vive en el riego, no en el sensor.
 
 **¿Por qué `SistemaRiego` no debería ser subclase de `Sensor`?** Porque un sensor *observa* (produce y interpreta una medición) y el riego *actúa* (suministra agua). El riego no tiene ubicación de medición ni última medición ni interpretación; heredar le daría atributos y métodos que no le corresponden. La relación correcta es "utiliza", no "es un".
+
+## 6. Diseño de clases
+
+| Clase | Atributos propuestos | Tipo de dato | Métodos propuestos | Responsabilidad |
+|---|---|---|---|---|
+| Sensor | `- id`, `- ubicacion`, `- activo`, `- ultimaMedicion` | String, String, boolean, double | `Sensor(id, ubicacion)`, getters, `activar()`, `desactivar()`, `registrarMedicion(double)`, `evaluarMedicion()`, `mostrarInformacion()` | Datos y comportamiento comunes |
+| SensorTemperatura | (ninguno propio) | — | constructor, `@Override evaluarMedicion()`, `convertirAFahrenheit()` | Interpretar °C |
+| SensorHumedad | (ninguno propio) | — | constructor, `@Override evaluarMedicion()` | Interpretar humedad ambiental |
+| SensorHumedadSuelo | (ninguno propio) | — | constructor, `@Override evaluarMedicion()`, `requiereRiego()` | Interpretar suelo e indicar necesidad de riego |
+| SistemaRiego | `- activo` | boolean | `SistemaRiego()`, `activar()`, `desactivar()`, `estaActivo()`, `mostrarEstado()` | Estado y acciones del riego |
+
+- **Private:** todos los atributos; solo se cambian con métodos (`registrarMedicion`, `activar`, `desactivar`).
+- **Por constructor:** `id` y `ubicacion` en los sensores. El sensor inicia activo con medición 0; el riego inicia inactivo.
+- **Consultables:** mediante getters (`getId`, `getUltimaMedicion`, `isActivo`, `estaActivo`).
+- **En la clase general:** lo común. **Solo en subclases:** criterios de interpretación y comportamientos particulares.
+
+## 7. Jerarquía de clases
+
+- **Jerarquía:** `Sensor` ← `SensorTemperatura`, `SensorHumedad`, `SensorHumedadSuelo`.
+- **Solo colabora:** `SistemaRiego` usa información del sensor de humedad del suelo.
+
+## Diagrama UML inicial
+
+![Diagrama UML inicial](uml-inicial.png)
+
+## 8. Justificación del diseño
+
+- **Por qué estas clases:** una por cada elemento del problema con responsabilidad propia, más una superclase para lo compartido.
+- **Responsabilidad principal:** `Sensor` guarda y registra datos; cada subclase interpreta su variable; `SistemaRiego` controla el agua.
+- **Atributos private:** para que no se modifiquen desde `Main` (por ejemplo `sensor.ultimaMedicion = 25`) y el objeto controle su estado.
+- **Constructores:** `id` y `ubicacion`; las subclases los pasan con `super(...)`.
+- **Superclase:** `Sensor`. **Subclases:** `SensorTemperatura`, `SensorHumedad`, `SensorHumedadSuelo`.
+- **Por qué "es un":** cada una es un tipo de sensor y tiene todo lo que un sensor tiene.
+- **En la superclase:** id, ubicación, estado, medición y su manejo. **En las subclases:** interpretación y comportamientos propios.
+- **Por qué `SistemaRiego` no está en la jerarquía:** actúa, no mide (ver sección 5).
+- **Evitar duplicación:** ninguna subclase redeclara atributos; la decisión de riego no se repite en el sensor.
