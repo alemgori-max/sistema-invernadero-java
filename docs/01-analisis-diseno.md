@@ -31,3 +31,25 @@ El invernadero como tal no lo modelo como clase: `Main` coordina los objetos en 
 | Sensor de humedad ambiental | Interpretar humedad del aire | (lo heredado) | Interpretar con rangos de % de aire |
 | Sensor de humedad del suelo | Interpretar humedad del suelo | (lo heredado) | Interpretar con rangos de suelo; indicar si requiere riego |
 | Sistema de riego | Suministrar agua | Si está activo o inactivo | Activarse, detenerse, informar su estado, decidir con base en la humedad del suelo |
+
+## 4. Características comunes y especialización
+
+- **Información en común:** identificación, ubicación, estado activo/inactivo y última medición.
+- **Comportamientos en común:** registrar una medición, consultarla, activarse/desactivarse y mostrar su información.
+- **Lo que cambia según el tipo:** la unidad (°C o %), los criterios de interpretación y los comportamientos particulares.
+- **Concepto general:** *Sensor*.
+- **Especializaciones:** sensor de temperatura, de humedad ambiental y de humedad del suelo.
+
+## 5. Relaciones entre objetos
+
+| Relación | Tipo | ¿Herencia? |
+|---|---|---|
+| Sensor de temperatura **ES UN** Sensor | Generalización/especialización | Sí |
+| Sensor de humedad ambiental **ES UN** Sensor | Generalización/especialización | Sí |
+| Sensor de humedad del suelo **ES UN** Sensor | Generalización/especialización | Sí |
+| Sistema de riego **UTILIZA** información del sensor de humedad del suelo | Colaboración | No |
+
+- **Colaboran:** el sensor de humedad del suelo y el sistema de riego. El riego necesita saber si el suelo requiere riego; el sensor no necesita conocer al riego.
+- **No se duplica:** id, ubicación, estado y medición viven solo en la superclase; la decisión de regar vive en el riego, no en el sensor.
+
+**¿Por qué `SistemaRiego` no debería ser subclase de `Sensor`?** Porque un sensor *observa* (produce y interpreta una medición) y el riego *actúa* (suministra agua). El riego no tiene ubicación de medición ni última medición ni interpretación; heredar le daría atributos y métodos que no le corresponden. La relación correcta es "utiliza", no "es un".
