@@ -89,3 +89,9 @@ El invernadero como tal no lo modelo como clase: `Main` coordina los objetos en 
 - **En la superclase:** id, ubicación, estado, medición y su manejo. **En las subclases:** interpretación y comportamientos propios.
 - **Por qué `SistemaRiego` no está en la jerarquía:** actúa, no mide (ver sección 5).
 - **Evitar duplicación:** ninguna subclase redeclara atributos; la decisión de riego no se repite en el sensor.
+
+## 9. Constructores y super
+
+- **¿Los constructores de la superclase se heredan?** No. Cada subclase declara el suyo.
+- **¿Qué constructor se ejecuta primero?** El de la superclase `Sensor`, y después el de la subclase.
+- **¿Para qué usé `super(id, ubicacion)`?** Para inicializar la parte `Sensor` del objeto (id, ubicación, estado, medición) sin repetir esa asignación en cada subclase; además los atributos son `private` y las subclases no pueden asignarlos directamente.
